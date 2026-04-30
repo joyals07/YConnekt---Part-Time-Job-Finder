@@ -20,9 +20,12 @@ import EmployerApp.urls, OpenApp.urls , EmployeeApp.urls
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns, static
 from . import settings
 from rest_framework_simplejwt.views import TokenRefreshView
+from django.views.generic import RedirectView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/YConnekt/Index/', permanent=False)),
     path('Employer/',include(EmployerApp.urls)),
     path('YConnekt/',include(OpenApp.urls)),
     path('Employee/',include(EmployeeApp.urls)),
