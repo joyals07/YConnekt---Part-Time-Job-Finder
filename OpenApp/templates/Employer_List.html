@@ -1,0 +1,129 @@
+{% extends 'AdminPage.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl">
+  <div class="container-fluid py-1 px-3">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0">
+        <li class="breadcrumb-item text-sm">
+          <a class="opacity-5 text-dark" href="#">Pages</a>
+        </li>
+        <li class="breadcrumb-item text-sm text-dark active">Employers</li>
+      </ol>
+
+      <h6 class="font-weight-bolder mb-0">All Employers</h6>
+    </nav>
+
+  </div>
+</nav>
+
+<div class="container-fluid py-4">
+
+<!-- Page Title -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card-body text-center">
+      <h5 class="mb-0">{{ employers|length }} Registered Employers</h5>
+    </div>
+  </div>
+</div>
+
+
+{% for emp in employers %}
+
+<div class="row">
+  <div class="col-12">
+
+    <div class="card mb-3 shadow-sm employer-card">
+      <div class="card-body d-flex justify-content-between align-items-center">
+
+        <!-- Left: Logo + Info -->
+        <div class="d-flex align-items-center">
+
+          <!-- Logo -->
+          <div class="me-3">
+
+            {% if emp.store_logo %}
+              <img src="{{ emp.store_logo.url }}"
+                   width="60"
+                   height="60"
+                   style="border-radius:12px; object-fit:cover;">
+            {% else %}
+              <img src="{% static 'assets/img/default-logo.png' %}"
+                   width="60"
+                   height="60"
+                   style="border-radius:12px; object-fit:cover;">
+            {% endif %}
+
+          </div>
+
+          <!-- Employer Info -->
+          <div>
+
+            <h6 class="mb-1">
+              {{ emp.store_name }}
+            </h6>
+
+            <small class="text-secondary">
+              {{ emp.email }}
+            </small>
+
+            <br>
+
+            <small class="text-muted">
+              <i class="material-icons text-sm align-middle">location_on</i>
+              {{ emp.store_location }}
+            </small>
+
+          </div>
+
+        </div>
+
+        <!-- Right: Employer Badge -->
+
+        <div>
+          <span class="badge bg-gradient-info">
+            Employer
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% empty %}
+
+<div class="text-center mt-5">
+  <h6>No employers registered yet</h6>
+</div>
+
+{% endfor %}
+
+</div>
+
+</main>
+
+
+<style>
+
+.employer-card{
+  transition: all 0.3s ease;
+  cursor:pointer;
+}
+
+.employer-card:hover{
+  transform: translateY(-4px);
+  box-shadow:0 10px 25px rgba(0,0,0,0.15);
+}
+
+</style>
+
+{% endblock %}

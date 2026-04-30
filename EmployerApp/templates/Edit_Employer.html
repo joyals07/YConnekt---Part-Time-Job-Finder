@@ -1,0 +1,188 @@
+{% extends 'Employer_Dash.html' %}
+{% block content %}
+
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Profile</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit Profile</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Edit Profile</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.store_logo %}
+        <img src="{{ emp.store_logo.url }}" height="40" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'ProfilePage' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+
+
+<div class="container-fluid py-4">
+  <div class="card">
+
+    <div class="card-header bg-gradient-primary">
+      <h6 class="text-white mb-0">Edit Profile</h6>
+    </div>
+
+    <div class="card-body">
+
+      <form method="POST"
+            enctype="multipart/form-data"
+            class="px-4 py-3"
+            action="{% url 'EditProfilePage' %}">
+
+        {% csrf_token %}
+
+        <!-- Store Name -->
+        <div class="mb-3">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline w-100 is-filled">
+              <label class="form-label">Store Name</label>
+              <input type="text"
+                     name="store_name"
+                     class="form-control"
+                     value="{{ emp.store_name }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="mb-3">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline w-100 is-filled">
+              <label class="form-label">Store Location</label>
+              <input type="text"
+                     name="store_location"
+                     class="form-control"
+                     value="{{ emp.store_location }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Number -->
+        <div class="mb-3">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline w-100 is-filled">
+              <label class="form-label">Contact Number</label>
+              <input type="text"
+                     name="contact_number"
+                     class="form-control"
+                     value="{{ emp.contact_number }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline w-100 is-filled">
+              <label class="form-label">Business Email</label>
+              <input type="email"
+                     name="business_email"
+                     class="form-control"
+                     value="{{ emp.business_email }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Website -->
+        <div class="mb-3">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline w-100 is-filled">
+              <label class="form-label">Website</label>
+              <input type="text"
+                     name="website"
+                     class="form-control"
+                     value="{{ emp.website }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline w-100 is-filled">
+              <label class="form-label">Store Description</label>
+              <input type="text"
+                     name="store_description"
+                     class="form-control"
+                     value="{{ emp.store_description }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile Picture -->
+        <div class="mb-3">
+            <img src="{{emp.store_logo.url}}" style="width:100px; margin:5px;" >
+          <label class="form-label">Store Logo</label>
+          <div class="input-group input-group-outline w-100">
+            <input type="file"
+                   name="store_logo"
+                   class="form-control">
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="d-flex justify-content-end mt-4 pe-md-3">
+          <button type="submit"
+                  class="btn bg-gradient-primary mb-0">
+            <i class="material-icons text-sm">save</i>
+            &nbsp;&nbsp;Save Changes
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
+
+</main>
+{% endblock %}

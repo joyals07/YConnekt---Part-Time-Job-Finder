@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>YConnekt | Employee</title>
+
+<!--    FORM STYLE-->
+    <style>
+        *{
+          font-family:Arial, sans-serif;
+        }
+        body{
+            min-height: 100vh;
+            background-color: #f6f8fc;
+            background-image: linear-gradient(#e4e7ee 1px, transparent 1px), linear-gradient(90deg, #e4e7ee 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .container {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .form_area {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          background-color: #EDDCD9;
+          height: auto;
+          width: auto;
+          border: 2px solid #264143;
+          border-radius: 20px;
+          box-shadow: 3px 4px 0px 1px #E99F4C;
+        }
+
+        .title {
+          color: #264143;
+          font-weight: 900;
+          font-size: 1.5em;
+          margin-top: 20px;
+        }
+
+        .sub_title {
+          font-weight: 600;
+          margin: 5px 0;
+          color: black;
+        }
+
+        .form_group {
+          display: flex;
+          flex-direction: column;
+          align-items: baseline;
+          margin: 10px;
+        }
+
+        .form_style {
+          outline: none;
+          border: 2px solid #264143;
+          box-shadow: 3px 4px 0px 1px #E99F4C;
+          width: 650px;
+          padding: 12px 10px;
+          border-radius: 4px;
+          font-size: 15px;
+        }
+
+        .form_style:focus, .form_btn:focus {
+          transform: translateY(4px);
+          box-shadow: 1px 2px 0px 0px #E99F4C;
+        }
+
+        .btn {
+          padding: 15px;
+          margin: 25px 0px;
+          width: 290px;
+          font-size: 15px;
+          background: #DE5499;
+          border-radius: 10px;
+          font-weight: 800;
+          box-shadow: 3px 3px 0px 0px #E99F4C;
+        }
+
+        .btn:hover {
+          opacity: .9;
+        }
+
+        .link {
+          font-weight: 800;
+          color: #264143;
+          padding: 5px;
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+    </style>
+    <style>
+       .form_area {
+          /* animation */
+          animation: floatForm 4s ease-in-out infinite;
+        }
+
+        /* Floating movement */
+        @keyframes floatForm {
+          0% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-12px);
+          }
+          100% {
+            transform: translateY(0px);
+          }
+        }
+
+                .container {
+          animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(25px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+    </style>
+
+
+</head>
+
+<body >
+
+<!--  FORM STARTS-->
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+
+     <div class="container" style="margin-top:50px;">
+    <div class="form_area">
+        <p class="title">EMPLOYEE REGISTER</p>
+        <form method="post" action="{% url 'SaveEmployee' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form_group">
+                <label class="sub_title" style="margin:0 auto">YOUR DETAILS</label>
+            </div>
+
+            <div class="form_group">
+                <label class="sub_title" >Name</label>
+                <input placeholder="Enter your name" class="form_style" type="text" name="yname">
+            </div>
+            <div class="form_group">
+                <label class="sub_title" >Contact Number</label>
+                <input placeholder="Enter your contact number" class="form_style" type="number" name="ynum">
+            </div>
+            <div class="form_group">
+                <label class="sub_title">Current Location</label>
+                <input placeholder="Enter your location" class="form_style" type="text" name="yloc">
+            </div>
+            <div class="form_group">
+                <label class="sub_title">Date of Birth</label>
+                <input class="form_style" type="date" name="ydob" max="{{ today }}">
+            </div>
+            <div class="form_group">
+                <label class="sub_title">Gender</label>
+                <select class="form_style" name="gender" style="width:672px;">
+                    <option value="" disabled {% if not emp.gender %}selected{% endif %}></option>
+                    {% for value, label in gender_choices %}
+                      <option value="{{ value }}"
+                        {% if emp.gender == value %}selected{% endif %}>
+                        {{ label }}
+                      </option>
+                    {% endfor %}
+                </select>
+
+            </div>
+            <div class="form_group">
+                <label class="sub_title">Profile Picture</label>
+
+                <input type="file" name="profpic" class="form_style" accept="image/*" id="logoInput">
+                <img id="logoPreview" style="margin-top:10px; width:120px; display:none; border:2px solid #264143; border-radius:8px;">
+            </div>
+             <span>(Recommended 100px X 100px)</span>
+
+            <div class="form_group">
+                <label class="sub_title" style="margin:20px auto 0; ">AND</label>
+            </div>
+
+            <div class="form_group">
+                <label class="sub_title" >Username</label>
+                <input placeholder="Enter a username" class="form_style" type="text" name="username">
+            </div>
+            <div class="form_group">
+                <label class="sub_title">Email</label>
+                <input placeholder="Enter your email" id="email" class="form_style" type="email" name="email">
+            </div>
+            <div class="form_group">
+                <label class="sub_title">Password</label>
+                <input placeholder="Enter a password" class="form_style" type="password" name="password">
+            </div>
+            <div>
+                <button class="btn" type="submit">REGISTER</button>
+            </div>
+        </form>
+    </div>
+    </div>
+
+  </main>
+
+
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script>
+    {% for msg in messages %}
+      swal('{{ msg }}')
+    {% endfor %}
+  </script>
+</body>
+</html>

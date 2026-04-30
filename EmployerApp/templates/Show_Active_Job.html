@@ -1,0 +1,254 @@
+
+{% extends 'Employer_Dash.html' %}
+{% load static %}
+
+    {% block content %}
+
+  <style>
+    .card {
+        border-radius: 12px;
+      }
+
+      .card-header {
+        border-radius: 12px 12px 0 0 !important;
+      }
+
+      .btn {
+        transition: all 0.2s ease;
+        height: 40px;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      }
+  </style>
+
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">View Our Jobs</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{job.job_title}}</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">{{job.job_title}}</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.store_logo %}
+        <img src="{{ emp.store_logo.url }}" height="40" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'ProfilePage' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+  <div class="container-fluid py-4">
+
+  <!-- HEADER CARD -->
+  <div class="card mb-4">
+    <div class="card-header bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+
+      <!-- LEFT -->
+      <div class="d-flex">
+        <div class="me-3">
+          {% if emp.store_logo %}
+            <img src="{{ emp.store_logo.url }}"
+                 width="90" height="90"
+                 style="border-radius:12px; object-fit:cover;">
+          {% else %}
+            <img src="{% static 'assets/img/default-logo.png' %}"
+                 width="90" height="90"
+                 style="border-radius:12px;">
+          {% endif %}
+        </div>
+
+        <div>
+          <h4 class="text-white mb-0">{{ job.job_title }}</h4>
+
+          <p class="text-white opacity-8 mb-0">
+            {{ emp.store_name }}
+          </p>
+
+          <p class="text-white opacity-8 mt-1 mb-0">
+            <span class="badge bg-white text-dark">
+              {{ job.job_location }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- RIGHT ACTIONS -->
+      <div class="mt-3 d-flex gap-2">
+
+        <!-- Edit -->
+        <a href="{% url 'EditJob' job.id %}" class="btn bg-gradient-light"><i class="material-icons text-sm">edit</i>Edit</a>
+
+        <!-- Pause / Resume -->
+        <a href="{% url 'toggleJob' job.id %}"
+           class="btn {% if job.is_active %}bg-gradient-warning{% else %}bg-gradient-success{% endif %}">
+
+          <i class="material-icons text-sm">
+            {% if job.is_active %}pause{% else %}play_arrow{% endif %}
+          </i>
+
+          {% if job.is_active %}Pause{% else %}Resume{% endif %}
+        </a>
+
+        <!-- Delete -->
+        <a href="{% url 'deleteJob' job.id %}"
+           class="btn bg-gradient-danger"
+           onclick="return confirm('Delete this job?')">
+
+          <i class="material-icons text-sm">delete</i> DELETE
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="row">
+
+    <!-- LEFT SIDE -->
+    <div class="col-lg-8">
+
+      <!-- Description -->
+      <div class="card mb-4">
+        <div class="card-header pb-0">
+          <h6 class="text-primary">
+            <i class="material-icons me-2">description</i>
+            Job Description
+          </h6>
+        </div>
+
+        <div class="card-body">
+          <p>{{ job.job_description }}</p>
+        </div>
+      </div>
+
+      <!-- Requirements -->
+      <div class="card mb-4">
+        <div class="card-header pb-0">
+          <h6 class="text-primary">
+            <i class="material-icons me-2">check_circle</i>
+            Job Requirements
+          </h6>
+        </div>
+
+        <div class="card-body">
+          <ul>
+            {% for req in requirements %}
+              <li>{{ req }}</li>
+            {% empty %}
+              <li>No requirements specified.</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="col-lg-4">
+
+      <!-- Summary -->
+      <div class="card mb-4">
+        <div class="card-header pb-0">
+          <h6 class="text-primary">
+            <i class="material-icons me-2">info</i>
+            Job Summary
+          </h6>
+        </div>
+
+        <div class="card-body">
+          <ul class="list-unstyled">
+
+            <li class="mb-3">
+              <strong>Status:</strong><br>
+              {% if job.is_active %}
+                <span class="badge bg-gradient-success">Active</span>
+              {% else %}
+                <span class="badge bg-gradient-secondary">Inactive</span>
+              {% endif %}
+            </li>
+
+            <li class="mb-3">
+              <strong>Job Type:</strong><br>
+              {{ job.job_type }}
+            </li>
+
+            <li class="mb-3">
+              <strong>Location:</strong><br>
+              {{ job.job_location }}
+            </li>
+
+            <li class="mb-3">
+              <strong>Posted:</strong><br>
+              {{ job.posted_date|date:"M d, Y" }}
+            </li>
+
+            <li class="mb-3">
+              <strong>Deadline:</strong><br>
+              <span class="text-danger">
+                {{ job.closing_date|date:"M d, Y" }}
+              </span>
+            </li>
+
+            <li class="mb-3">
+              <strong>Total Applications:</strong><br>
+              {{ total_applications }}
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+ {% endblock %}

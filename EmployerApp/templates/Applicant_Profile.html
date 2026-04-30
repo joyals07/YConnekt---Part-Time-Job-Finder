@@ -1,0 +1,223 @@
+{% extends 'Employer_Dash.html' %}
+{% block content %}
+
+<nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Applications</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ employee.full_name }}</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">{{ employee.full_name }}'s Profile</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.store_logo %}
+        <img src="{{ emp.store_logo.url }}" height="40" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'ProfilePage' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+<div class="container-fluid py-4">
+
+  <div class="card">
+
+    <div class="card-header bg-gradient-primary" style="display:flex; justify-content: space-between;">
+      <div><h6 class="text-white mb-0">Applicant Profile</h6></div>
+      <div>
+      {% if application.id %}
+        <a href="{% url 'ToggleSaveApplicant' application.id %}"
+           class="btn {% if is_saved %}bg-gradient-success{% else %}btn-success{% endif %}">
+           <i class="material-icons text-sm">
+              {% if is_saved %}bookmark{% else %}bookmark_border{% endif %}
+           </i>
+           {% if is_saved %}Saved{% else %}Save Applicant{% endif %}
+        </a>
+      {% endif %}
+        </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="row">
+
+        <!-- Left Side -->
+        <div class="col-md-4 text-center">
+
+          {% if employee.profile_picture %}
+            <img src="{{ employee.profile_picture.url }}"
+                 class="img-fluid border-radius-lg shadow"
+                 style="max-height:200px;">
+          {% else %}
+            <i class="material-icons" style="font-size:120px;">
+              account_circle
+            </i>
+          {% endif %}
+
+          <h5 class="mt-3">{{ employee.full_name }}</h5>
+          <p class="text-sm text-muted">
+            Applied for {{ application.job.job_title }}
+          </p>
+
+          {% if applicant.resume %}
+            <a href="{{ application.resume.url }}" target="_blank" class="btn bg-gradient-info mt-3">View Resume</a>
+          {% else %}
+            <span class="text-muted"></span>
+          {% endif %}
+
+        </div>
+
+        <!-- Right Side -->
+        <div class="col-md-8">
+
+          <ul class="list-group">
+
+            <li class="list-group-item">
+              <strong>Email:</strong>
+              {{ employee.personal_email }}
+            </li>
+
+            <li class="list-group-item">
+              <strong>Contact:</strong>
+              {{ employee.contact_number }}
+            </li>
+
+            <li class="list-group-item">
+              <strong>Location:</strong>
+              {{ employee.current_location }}
+            </li>
+
+            <li class="list-group-item">
+              <strong>Date of Birth:</strong>
+              {{ employee.date_of_birth }}
+            </li>
+
+            <li class="list-group-item">
+              <strong>Gender:</strong>
+              {{ employee.gender }}
+            </li>
+
+            <li class="list-group-item">
+              <strong>Age:</strong>
+              {{ application.age }}
+            </li>
+
+            <li class="list-group-item">
+              <strong>Applied On:</strong>
+              {{ application.applied_on|date:"d M Y" }}
+            </li>
+
+            <li class="list-group-item">
+  <strong>Rating:</strong>
+
+  {% if total_ratings > 0 %}
+    <span class="text-warning">
+      {% for i in "12345" %}
+        {% if forloop.counter <= avg_rating %}
+          ★
+        {% else %}
+          ☆
+        {% endif %}
+      {% endfor %}
+    </span>
+
+    <small class="text-muted">({{ total_ratings }} reviews)</small>
+
+  {% else %}
+    <span class="text-muted">No ratings yet</span>
+  {% endif %}
+</li>
+
+          </ul>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="card mt-4">
+  <div class="card-header bg-gradient-warning">
+
+  </div>
+
+  <div class="card-body text-center">
+    <form method="POST">
+      {% csrf_token %}
+
+      {% for i in "12345" %}
+        <button type="submit"
+                name="rating"
+                value="{{ forloop.counter }}"
+                style="background:none;border:none;">
+
+          <i class="material-icons"
+             style="font-size:40px; cursor:pointer; color:
+             {% if rating_obj and rating_obj.rating >= forloop.counter %}
+               #ffc107
+             {% else %}
+               #ddd
+             {% endif %};">
+
+             {% if rating_obj and rating_obj.rating >= forloop.counter %}
+               star
+             {% else %}
+               star_border
+             {% endif %}
+
+          </i>
+        </button>
+      {% endfor %}
+    </form>
+     <h6 class="text-black mb-0">Rate Applicant</h6>
+  </div>
+
+</div>
+
+</div>
+
+{% endblock %}

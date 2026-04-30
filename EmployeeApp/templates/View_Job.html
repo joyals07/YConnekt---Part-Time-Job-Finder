@@ -1,0 +1,250 @@
+
+{% extends 'Employee_Dashboard.html' %}
+{% load static %}
+
+
+
+{% block content %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Active Jobs</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ job.job_title }}</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">{{ job.job_title }}</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.profile_picture %}
+        <img src="{{ emp.profile_picture.url }}" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'About' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+<!--    NAVBAR-->
+    <div class="container-fluid py-4">
+    <!-- Page Header -->
+      <div class="card mb-4">
+        <div class="card-header bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-3">
+              {% if job.employer.store_logo %}
+                  <img src="{{ job.employer.store_logo.url }}"
+                       width="100"
+                       height="100"
+                       style="border-radius: 12px; object-fit: cover;">
+              {% else %}
+                  <img src="{% static 'assets/img/default-logo.png' %}"
+                       width="60"
+                       height="60"
+                       style="border-radius: 12px; object-fit: cover;">
+              {% endif %}
+            </div>
+            <div>
+              <h4 class="text-white mb-0">{{ job.job_title }}</h4>
+              <p class="text-white opacity-8 mb-0">
+                {{ job.employer.store_name }}
+              </p>
+              <p class="text-white opacity-8 mt-1 mb-0">
+                <span class="badge bg-white text-dark" >
+                  <a href="{{job.employer.website}} ">{{job.employer.website}}</a>
+                </span>
+              </p>
+            </div>
+          </div>
+          <div>
+            <div class=" mt-4">
+              {% if already_applied %}
+                <button class="btn bg-gradient-light" disabled>
+                    <i class="material-icons text-sm">check_circle</i>
+                    Already Applied
+                </button>
+              {% else %}
+                <a href="{% url 'Application' job.id %}"
+                   class="btn bg-gradient-success">
+                    <i class="material-icons text-sm">send</i>
+                    Apply Now
+                </a>
+              {% endif %}
+
+              <!-- SAVE TOGGLE BUTTON -->
+              {% if not job.is_active %}
+                  <button class="btn bg-gradient-secondary" disabled>
+                      <i class="material-icons text-sm">block</i>
+                      Job Expired
+                  </button>
+              {% else %}
+                <a href="{% url 'ToggleSaveJob' job.id %}" class="btn {% if saved %}bg-gradient-info{% else %} bg-white text-dark{% endif %}">
+                  <i class="material-icons text-sm">
+                      {% if saved %}
+                          bookmark
+                      {% else %}
+                          bookmark_border
+                      {% endif %}
+                  </i>
+
+                  {% if saved %}
+                      Saved
+                  {% else %}
+                      Save Job
+                  {% endif %}
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+      <!-- Left Section -->
+        <div class="col-lg-8">
+          <!-- Job Description -->
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6 class="mb-0 text-primary">
+                <i class="material-icons me-2">description</i>
+                Job Description
+              </h6>
+            </div>
+            <div class="card-body">
+              <p class="text-dark">
+                {{ job.job_description }}
+              </p>
+            </div>
+          </div>
+
+          <!-- Job Requirements -->
+          <div class="card mb-4">
+            <div class="card-header pb-0">
+              <h6 class="mb-0 text-primary">
+                <i class="material-icons me-2">check_circle</i>
+                Job Requirements
+              </h6>
+            </div>
+            <div class="card-body">
+              <ul>
+                {% for req in requirements %}
+                  <li>{{ req }}</li>
+                {% empty %}
+                  <li>No requirements specified.</li>
+                {% endfor %}
+              </ul>
+            </div>
+          </div>
+        </div>
+      <!-- Right Section -->
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header pb-0">
+              <h6 class="text-primary">
+                <i class="material-icons me-2">info</i>
+                Job Summary
+              </h6>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled">
+
+                <li class="mb-3">
+                  <strong>Employment Type:</strong><br>
+                  {{ job.job_type }}
+                </li>
+
+                <li class="mb-3">
+                  <strong>Job Location:</strong><br>
+                  {{ job.job_location }}
+                </li>
+
+
+                <li class="mb-3">
+                  <strong>Published On:</strong><br>
+                  {{ job.posted_date|date:"M d, Y" }}
+                </li>
+
+                <li class="mb-3">
+                  <strong>Application Deadline:</strong><br>
+                  {{ job.closing_date|date:"M d, Y" }}
+                </li>
+
+                <li class="mb-3">
+                  <strong>Contact Email:</strong><br>
+                  {{job.employer.business_email}}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+     <style >
+    .job-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .job-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+     .btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      }
+    </style>
+    <style>
+    .sidenav{
+      font-family:Arial !important;
+    }
+  </style>
+
+
+{% endblock %}

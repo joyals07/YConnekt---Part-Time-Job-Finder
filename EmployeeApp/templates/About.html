@@ -1,0 +1,166 @@
+
+{% extends 'Employee_Dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+
+    <div class="container-fluid py-1 px-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">About</li>
+      </ol>
+      <h6 class="font-weight-bolder mb-0">About</h6>
+    </nav>
+    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+      </div>
+
+      <ul class="navbar-nav justify-content-end">
+
+    <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+    id="userDropdown"
+    role="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false">
+
+    {% if emp.profile_picture %}
+    <img src="{{ emp.profile_picture.url }}" width="40"
+         style="border-radius:50%; margin-right:8px;">
+    {% endif %}
+
+    <i class="fa fa-user me-sm-1"></i>
+    <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+    aria-labelledby="userDropdown">
+
+      <li>
+        <a class="dropdown-item border-radius-md" href="{% url 'About' %}">
+          <i class="material-icons opacity-6 me-2 text-md">person</i>
+          Profile
+        </a>
+      </li>
+      <li><hr class="horizontal dark my-2"></li>
+      <li>
+        <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+          <i class="material-icons opacity-6 me-2 text-md">logout</i>
+          Logout
+        </a>
+      </li>
+    </ul>
+    </li>
+    </ul>
+
+
+    </div>
+    </div>
+    </nav>
+
+    {% if emp %}
+    <div class="container-fluid px-2 px-md-4" style="padding-bottom:20px;">
+    <div class="page-header min-height-100 border-radius-xl" >
+    </div>
+    <div class="card card-body mx-3 mx-md-4 mt-n6">
+
+      <div class="row gx-4 mb-2 p-2">
+
+          <div class="col-auto">
+          <div class="avatar avatar-xl position-relative">
+            <img src="{{emp.profile_picture.url}}" alt="profile_image" class="w-100 h-100 border-radius-lg shadow-sm">
+          </div>
+        </div>
+
+        <div class="col-auto my-auto">
+          <div class="h-100">
+            <h5 class="mb-1">
+              {{emp.full_name}}
+            </h5>
+               <span>{{ request.user }}</span>
+          </div>
+        </div>
+
+        <div class="col d-flex justify-content-end">
+            <div class="col-md-4 text-end">
+              <a href="{% url 'EditProfile' %}"
+                 class="btn btn-sm bg-gradient-primary">
+                 <i class="material-icons text-sm">edit</i>
+                 Edit Profile
+              </a>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row">
+          <div class="col">
+            <div class="card card-plain h-100">
+              <div class="card-header pb-0 p-3">
+              </div>
+              <div class="card-body p-3">
+                <hr class="horizontal gray-light my-2">
+                <ul class="list-group">
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Location:</strong>&nbsp;{{emp.current_location}}</li>
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Contact Number:</strong>&nbsp;{{emp.contact_number}}</li>
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Email:</strong>&nbsp;{{emp.personal_email}}</li>
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Date of Birth:</strong>&nbsp;{{emp.date_of_birth}}</li>
+                  <li class="list-group-item border-0 ps-0 pt-0 text-sm"><strong class="text-dark">Gender:</strong>&nbsp;{{emp.gender}}</li>
+
+                </ul>
+              </div>
+          </div>
+            </div>
+
+        </div>
+      </div>
+    </div>
+    </div>
+    {% endif %}
+
+    <div class="container-fluid px-2 px-md-4 mt-4">
+    <div class="card card-body mx-3 mx-md-4 mt-n6">
+    <div class="card-header bg-gradient-warning">
+    <h6 class="text-white mb-0">Profile Rating</h6>
+    </div>
+
+
+    <div class="card-body text-center">
+
+    {% if average_rating %}
+    <h4>{{ average_rating|floatformat:1 }} / 5</h4>
+
+
+    {% for i in "12345" %}
+        <i class="material-icons"
+           style="font-size:35px; color:
+           {% if average_rating >= forloop.counter %}
+               #ffc107
+           {% else %}
+               #ddd
+           {% endif %};">
+           {% if average_rating >= forloop.counter %}
+               star
+           {% else %}
+               star_border
+           {% endif %}
+        </i>
+    {% endfor %}
+    <p class="mt-2 text-muted">Rated by {{ total_ratings }} employer{{ total_ratings|pluralize }}</p>
+    {% else %}
+    <p class="text-muted">Not rated yet</p>
+    {% endif %}
+
+    </div>
+    </div>
+    </div>
+
+
+
+</main>
+{% endblock %}

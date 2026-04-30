@@ -1,0 +1,186 @@
+{% extends 'Employer_Dash.html' %}
+{% load static %}
+{% block content %}
+
+  <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">View Our Jobs</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{job.job_title}}</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Edit {{job.job_title}}</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Edit {{job.job_title}}</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.store_logo %}
+        <img src="{{ emp.store_logo.url }}" height="40" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'ProfilePage' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+  <div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Edit Job</h6>
+          </div>
+        </div>
+
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+
+            <!-- EDIT FORM -->
+            <form method="POST" class="px-4 py-3" action="{% url 'EditJob' job.id %}">
+              {% csrf_token %}
+
+              <!-- Job Title -->
+              <div class="mb-3">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group input-group-outline is-filled w-100">
+                    <label class="form-label">Job Title/Role</label>
+                    <input type="text" name="JobTitle" class="form-control"
+                           value="{{ job.job_title }}">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Location -->
+              <div class="mb-3">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group input-group-outline is-filled w-100">
+                    <label class="form-label">Location</label>
+                    <input type="text" name="JobLocation" class="form-control"
+                           value="{{ job.job_location }}">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Job Type -->
+              <div class="mb-3">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group input-group-outline is-filled w-100">
+                    <label class="form-label">Job Type</label>
+                    <select name="JobType" class="form-control">
+                      <option value="" disabled {% if not job.job_type %}selected{% endif %}></option>
+                      {% for value,label in jobtypes %}
+                        <option value="{{ value }}"
+                          {% if job.job_type == value %}selected{% endif %}>
+                          {{ label }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Closing Date -->
+              <div class="mb-3">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group input-group-outline is-filled w-100">
+                    <label class="form-label">Closing Date</label>
+                    <input type="date" name="JobClosingDate"
+                           class="form-control"
+                           value="{{ job.closing_date|date:'Y-m-d' }}">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Description -->
+              <div class="mb-3">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group input-group-outline is-filled w-100">
+                    <label class="form-label">Job Description</label>
+                    <textarea name="JobDesc"
+                              class="form-control"
+                              rows="4">{{ job.job_description }}</textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Requirement -->
+              <div class="mb-3">
+                <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+                  <div class="input-group input-group-outline is-filled w-100">
+                    <label class="form-label">Job Requirement</label>
+                    <textarea name="JobReq"
+                              class="form-control"
+                              rows="4">{{ job.job_requirement }}</textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Buttons -->
+              <div class="d-flex justify-content-between mt-4 pe-md-3">
+
+                <a href="{% url 'showJob' job.id %}"
+                   class="btn btn-outline-secondary">
+                  Cancel
+                </a>
+
+                <button type="submit"
+                        class="btn bg-gradient-success mb-0">
+                  <i class="material-icons text-sm">edit</i>
+                  &nbsp;&nbsp;Update Job
+                </button>
+
+              </div>
+
+            </form>
+            <!-- END FORM -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+{% endblock %}

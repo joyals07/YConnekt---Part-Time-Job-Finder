@@ -1,0 +1,274 @@
+
+{% extends 'Employee_Dashboard.html' %}
+{% load static %}
+
+
+
+
+{% block content %}
+    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+        <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Active Jobs</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Active Jobs</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.profile_picture %}
+        <img src="{{ emp.profile_picture.url }}" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'About' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+<!--    NAVBAR-->
+        <div class="container-fluid py-4">
+
+          <!-- Page Title -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card-body text-center">
+                      <h5 class="mb-0">{{ jobs|length }} Active Jobs for You</h5>
+                    </div>
+                </div>
+            </div>
+
+<!--        SEARCH AND SORT -->
+            <form method="GET" class="row mb-4 ">
+
+                   <!-- Sort -->
+                  <div class="col-md-3 " style="width:150px;">
+                      <div class="input-group input-group-outline {% if sort %}is-filled{% endif %}">
+                        <label class="form-label">Sort By</label>
+                        <select name="sort" class="form-control">
+                          <option value="" disabled {% if not sort %}selected{% endif %}></option>
+                          <option value="new" {% if sort == "new" %}selected{% endif %}>
+                            Newest
+                          </option>
+                          <option value="old" {% if sort == "old" %}selected{% endif %}>
+                            Oldest
+                          </option>
+                          <option value="deadline" {% if sort == "deadline" %}selected{% endif %}>
+                            Deadline
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+
+                  <!-- Search -->
+                  <div class="col-md-6 mx-5">
+                      <div class="input-group input-group-outline w-100">
+                        <label class="form-label">Search Job, Location, Company</label>
+                        <input type="text" name="q" value="" class="form-control"
+                               placeholder="">
+                      </div>
+                  </div>
+
+                    <!-- Submit -->
+                  <div class="col-md-3 ">
+                    <button type="submit" class="btn bg-gradient-primary w-60">
+                      Search
+                    </button>
+                  </div>
+
+            </form>
+
+<!--        SEARCH AND SORT ENDS-->
+
+            <!-- Job Card -->
+            {% for i in jobs %}
+
+            <div class="row">
+                <a href="{% url 'ViewJob' i.id %}">
+                    <div class="col-12">
+                  <div class="card mb-3 shadow-sm job-card">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+
+                      <!-- Left: Logo + Info -->
+                      <div class="d-flex align-items-center">
+
+                        <!-- Logo -->
+                        <div class="me-3">
+
+                            {% if i.employer.store_logo %}
+                                <img src="{{ i.employer.store_logo.url }}"
+                                     width="60"
+                                     height="60"
+                                     style="border-radius: 12px; object-fit: cover;">
+                            {% else %}
+                                <img src="{% static 'assets/img/default-logo.png' %}"
+                                     width="60"
+                                     height="60"
+                                     style="border-radius: 12px; object-fit: cover;">
+                            {% endif %}
+
+                        </div>
+
+                        <!-- Job Info -->
+                        <div>
+                          <h6 class="mb-1">{{i.job_title}}</h6>
+                          <small class="text-secondary">{{i.employer.store_name}}</small><br>
+                          <small class="text-muted">
+                            <i class="material-icons text-sm align-middle">location_on</i>
+                            {{i.job_location}}
+                          </small>
+                        </div>
+                      </div>
+
+                      <!-- Right: Job Type Badge -->
+
+                      {% if i.job_type == 'Part Time' %}
+                        <div class="job-listing-meta">
+                          <span class="badge bg-gradient-danger">Part Time</span>
+                        </div>
+                      {% elif i.job_type == 'Full Time' %}
+                        <div class="job-listing-meta">
+                          <span class="badge bg-gradient-info">Full Time</span>
+                        </div>
+                      {% else %}
+                        <div class="job-listing-meta">
+                          <span class="badge bg-gradient-success">Flexible</span>
+                        </div>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                </div>
+                </a>
+            </div>
+            {% endfor %}
+
+
+<!--            PAGINATION STARTS-->
+            <div class="d-flex justify-content-center mt-4">
+              <nav>
+                <ul class="pagination ">
+                  {% if jobs.has_previous %}
+                    <li class="page-item mx-3">
+                      <a class="page-link"
+                         href="?page={{ jobs.previous_page_number }}&q={{ query }}&sort={{ sort }}">
+                        <i class="material-icons">chevron_left</i>
+                      </a>
+                    </li>
+                  {% endif %}
+                  <li class="page-item active ">
+                    <span class="page-link">
+                      {{ jobs.number }}
+                    </span>
+                  </li>
+                  {% if jobs.has_next %}
+                    <li class="page-item mx-3">
+                      <a class="page-link"
+                         href="?page={{ jobs.next_page_number }}&q={{ query }}&sort={{ sort }}">
+                        <i class="material-icons">chevron_right</i>
+                      </a>
+                    </li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+<!--            PAGINATION ENDS-->
+
+
+        </div>
+
+  </main>
+
+
+
+     <style>
+    .job-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .job-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+    </style>
+
+<script>
+  document.querySelectorAll('.input-group-outline input, .input-group-outline textarea').forEach(function(el) {
+    if (el.value !== "") {
+      el.parentElement.classList.add('is-filled');
+    }
+    el.addEventListener('focus', function() {
+      el.parentElement.classList.add('is-focused');
+    });
+    el.addEventListener('blur', function() {
+      el.parentElement.classList.remove('is-focused');
+      if (el.value !== "") {
+        el.parentElement.classList.add('is-filled');
+      } else {
+        el.parentElement.classList.remove('is-filled');
+      }
+    });
+  });
+
+  document.querySelectorAll('.input-group-outline select').forEach(function(el) {
+      if (el.value !== "") {
+        el.parentElement.classList.add('is-filled');
+      }
+      el.addEventListener('change', function() {
+        el.parentElement.classList.add('is-filled');
+      });
+  });
+
+  document.querySelectorAll('#closingDate').forEach(function(el) {
+  el.addEventListener('change', function() {
+    if (el.value !== "") {
+      el.parentElement.classList.add('is-filled');
+    }
+  });
+});
+
+</script>
+
+{% endblock %}

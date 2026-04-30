@@ -1,0 +1,250 @@
+
+{% extends 'Employee_Dashboard.html' %}
+{% load static %}
+
+
+{% block content %}
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
+
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm opacity-5 text-dark">Pages</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Active Jobs</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">{{ job.job_title }}</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Application Form</li>
+          </ol>
+          <h6 class="font-weight-bolder mb-0">Application Form</h6>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+          </div>
+
+          <ul class="navbar-nav justify-content-end">
+
+  <li class="nav-item dropdown d-flex align-items-center">
+
+    <!-- Toggle -->
+    <a href="#" class="nav-link text-body font-weight-bold px-0"
+       id="userDropdown"
+       role="button"
+       data-bs-toggle="dropdown"
+       aria-expanded="false">
+
+      {% if emp.profile_picture %}
+        <img src="{{ emp.profile_picture.url }}" width="40"
+             style="border-radius:50%; margin-right:8px;">
+      {% endif %}
+
+      <i class="fa fa-user me-sm-1"></i>
+      <span class="d-sm-inline d-none">{{ request.user.username }}</span>
+    </a>
+
+    <!-- Dropdown -->
+    <ul class="dropdown-menu dropdown-menu-end px-2 py-3"
+        aria-labelledby="userDropdown">
+
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'About' %}">
+              <i class="material-icons opacity-6 me-2 text-md">person</i>
+              Profile
+            </a>
+          </li>
+          <li><hr class="horizontal dark my-2"></li>
+          <li>
+            <a class="dropdown-item border-radius-md" href="{% url 'Logout' %}">
+              <i class="material-icons opacity-6 me-2 text-md">logout</i>
+              Logout
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+  <div class="container-fluid py-5">
+    <div class="row">
+      <div class="col">
+        <div class="card my-4">
+
+          <!-- Header -->
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+              <h6 class="text-white text-capitalize ps-3">
+                Apply for {{ job.job_title }} - {{ job.employer.store_name }}
+              </h6>
+            </div>
+          </div>
+
+          <!-- Body -->
+
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive p-0">
+              <div class="row gap-0">
+
+<!--                LEFT FORM DIV-->
+                <div class="col-6 px-5">
+                  <form method="POST"
+                    enctype="multipart/form-data"
+                    class=" py-3"
+                    action="{% url 'SendApplication' job_id=job_id  %}">
+
+                    {% csrf_token %}
+
+                    <!-- Full Name -->
+                    <div class="mb-3">
+                      <div class="input-group input-group-outline w-100 is-filled">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" name="full_name"
+                               class="form-control"
+                               value="{{ emp.full_name }}" readonly>
+                      </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                      <div class="input-group input-group-outline w-100 is-filled">
+                        <label class="form-label">Email</label>
+                        <input type="email"
+                               name="email"
+                               class="form-control"
+                               value="{{ emp.personal_email }}">
+                      </div>
+                    </div>
+
+                    <!-- Contact Number -->
+                    <div class="mb-3">
+                      <div class="input-group input-group-outline w-100 is-filled">
+                        <label class="form-label">Contact Number</label>
+                        <input type="text" name="contact"
+                               class="form-control" value="{{ emp.contact_number }}">
+                      </div>
+                    </div>
+
+                    <!-- Gender -->
+                    <div class="mb-3">
+                      <div class="input-group input-group-outline w-100 is-filled">
+                        <label class="form-label">Gender</label>
+                        <input type="text" name="gender"
+                               class="form-control" value="{{ emp.gender }}" readonly>
+                      </div>
+                    </div>
+
+                    <!-- Age -->
+                    <div class="mb-3">
+                      <div class="input-group input-group-outline w-100 is-filled">
+                        <label class="form-label">Age</label>
+                        <input type="text" name="age"
+                               class="form-control" value="{{ age }}" readonly>
+                      </div>
+                    </div>
+
+                  </div>
+
+<!--                RIGHT FORM DIV-->
+                  <div class="col-6 px-5 py-3">
+
+
+                    <!-- Location -->
+                    <div class="mb-3">
+                      <div class="input-group input-group-outline w-100 is-filled">
+                        <label class="form-label">Current Location</label>
+                        <input type="text" name="location"
+                               class="form-control"
+                               value="{{ emp.current_location }}">
+                      </div>
+                    </div>
+
+
+                       <!-- Resume Upload -->
+                    <div class="mb-3">
+                      <div class="ms-md-auto pe-md-3 d-flex align-items-center w-100" style="width:150px;">
+                        <div class="input-group input-group-outline image-input ">
+                          <label class="form-label">Upload Resume (PDF)</label>
+                          <input type="file" name="resume" accept=".pdf" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+
+                <!-- Cover Letter -->
+                <div class="mb-3">
+                  <div class="input-group input-group-outline w-100">
+                    <label class="form-label">Cover Letter</label>
+                    <textarea name="cover_letter"
+                              class="form-control"
+                              rows="7"></textarea>
+                  </div>
+                </div>
+                </div>
+
+
+                <!-- Submit -->
+                <div class="d-flex justify-content-center mt-4">
+                  <button type="submit"
+                          class="btn bg-gradient-success">
+                    <i class="material-icons text-sm">send</i>
+                    &nbsp;Submit Application
+                  </button>
+                </div>
+                </form>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  </main>
+
+
+
+  <script>
+      if (document.getElementsByClassName('input-group-outline').length != 0) {
+        var inputs = document.getElementsByClassName('form-control');
+        for (var i = 0; i < inputs.length; i++) {
+          inputs[i].addEventListener('focus', function() {
+            this.parentElement.classList.add('is-focused');
+          });
+          inputs[i].addEventListener('blur', function() {
+            if (this.value == "") {
+              this.parentElement.classList.remove('is-filled');
+            }
+            this.parentElement.classList.remove('is-focused');
+          });
+        }
+      }
+  </script>
+
+  <style>
+  .image-input input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    color: transparent;
+    padding-right: 130px;
+  }
+
+  .image-input input[type="file"]::file-selector-button,
+  .image-input input[type="file"]::-webkit-file-upload-button {
+    float: right;
+    margin-left: 12px;
+    background: #e91e63;
+    color: #fff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+</style>
+
+{% endblock %}

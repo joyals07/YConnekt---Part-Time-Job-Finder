@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YConnekt | Login</title>
+
+    <style>
+/* Page Layout */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+
+}
+
+/* Container */
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.form {
+  --input-focus: #2d8cf0;
+  --font-color: #323232;
+  --font-color-sub: #666;
+  --bg-color: beige;
+  --main-color: black;
+  padding: 20px;
+  background: lightblue;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  box-shadow: 4px 4px var(--main-color);
+}
+
+.title {
+  color: var(--font-color);
+  font-weight: 900;
+  font-size: 20px;
+  margin-bottom: 25px;
+}
+
+.title span {
+  color: var(--font-color-sub);
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.input {
+  width: 250px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--font-color);
+  padding: 5px 10px;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--font-color-sub);
+  opacity: 0.8;
+}
+
+.input:focus {
+  border: 2px solid var(--input-focus);
+}
+
+.login-with {
+  display: flex;
+  gap: 20px;
+}
+
+.button-log {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  color: var(--font-color);
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--main-color);
+}
+
+.button-log:active, .button-confirm:active {
+  box-shadow: 0px 0px var(--main-color);
+  transform: translate(3px, 3px);
+}
+
+.button-confirm {
+    text-align:center;
+  margin: 50px auto 0 auto;
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--font-color);
+  cursor: pointer;
+}
+
+</style>
+    <style>
+        /* Floating Container */
+.floating-elements {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Floating Brutalist Boxes */
+.float-box {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000;
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Position Variations */
+.box1 {
+    top: 15%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.box2 {
+    bottom: 20%;
+    right: 12%;
+    animation-delay: 2s;
+}
+
+.box3 {
+    top: 60%;
+    left: 35%;
+    animation-delay: 4s;
+}
+
+.box4 {
+    top: 25%;
+    left: 65%;
+    animation-delay: 0s;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%   { transform: translateY(0px) rotate(0deg); }
+    50%  { transform: translateY(-20px) rotate(6deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+    </style>
+
+    <style>
+        /* Links */
+a{
+    padding:8px 12px 15px;
+    text-decoration:none;
+}
+
+        /* Navbar */
+.navbar{
+    height:60px;
+    background:#111;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+}
+
+.navbar-logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.navbar-menu a{
+    color:white;
+    margin-left:20px;
+}
+
+.navbar-menu a:hover{
+    opacity:0.7;
+}
+    </style>
+
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-logo">YConnekt</div>
+
+  <div class="navbar-menu">
+      <a href="{% url 'IndexPage' %}">Home</a>
+      <a href="#">Login</a>
+      <a href="{% url 'IndexPage' %}#about">About</a>
+      <a href="{% url 'IndexPage' %}#contact">Contact</a>
+  </div>
+</nav>
+
+
+
+<div class="floating-elements">
+    <div class="float-box box1"></div>
+    <div class="float-box box2"></div>
+    <div class="float-box box3"></div>
+    <div class="float-box box4"></div>
+</div>
+
+
+<div class="container" style="padding:150px 0; margin-top:50px">
+
+
+    <form class="form" method="post" action="{% url 'Login' %}">
+        {% csrf_token %}
+        <div class="title" style="font-family: Arial;">Welcome,<br><span style="font-family: sans-serif;">sign up to continue</span></div>
+          <input class="input" name="username" placeholder="Username / Email" type="text">
+          <input class="input" name="password" placeholder="Password" type="password">
+
+          <button type="submit" class="button-confirm">Let`s go →</button>
+          <a href="{% url 'IndexPage' %}#choice" class="button-confirm" >Go Back</a>
+    </form>
+
+</div>
+
+<script>
+{% if messages %}
+    const messages = [
+        {% for message in messages %}
+            "{{ message }}",
+        {% endfor %}
+    ];
+
+    messages.forEach(msg => alert(msg));
+{% endif %}
+</script>
+</body>
+</html>

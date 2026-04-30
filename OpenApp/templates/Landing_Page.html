@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>YConnekt | Home</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+html {
+    scroll-behavior: smooth;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
+
+}
+
+/* Links */
+a{
+    padding:8px 12px 15px;
+    text-decoration:none;
+}
+
+/* Navbar */
+.navbar{
+    height:60px;
+    background:#111;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+}
+
+.navbar-logo{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.navbar-menu a{
+    color:white;
+    margin-left:20px;
+}
+
+.navbar-menu a:hover{
+    opacity:0.7;
+}
+
+/* Layout */
+.cardcontainer{
+    width:100%;
+    height:100%;
+}
+
+
+/* Sections */
+.section{
+    width:50%;
+    transition:0.6s;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    scroll-margin-top: 100px;
+
+}
+
+.left{
+    height:100%;
+    --color: rgba(114,114,114,0.3);
+    background: rgba(0,0,0,0.4);
+    background-image:
+        linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
+    background-size:55px 55px;
+}
+
+.right{
+    height:100%;
+    --color:#e1e1e1ad;
+      background: rgba(255,255,255,0.6);
+    background-image:
+        linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent),
+        linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
+    background-size:55px 55px;
+}
+
+.left:hover,
+.right:hover{
+    width:100%;
+}
+
+/* Forms */
+.leftform,
+.rightform{
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    border-radius:5px;
+    border:2px solid var(--main-color);
+    box-shadow:4px 4px var(--main-color);
+}
+
+/* Left form variables */
+.leftform{
+    --input-focus:#2d8cf0;
+    --font-color:#323232;
+    --font-color-sub:#666;
+    --bg-color:#fff;
+    --main-color:#323232;
+    background:lightgrey;
+}
+
+/* Right form variables */
+.rightform{
+    --input-focus:#2d8cf0;
+    --font-color:#fefefe;
+    --font-color-sub:#7e7e7e;
+    --bg-color:#111;
+    --main-color:#fefefe;
+    background:var(--bg-color);
+}
+
+.title{
+    color:var(--font-color);
+    font-weight:900;
+    font-size:20px;
+    margin-bottom:25px;
+}
+
+.title span{
+    color:var(--font-color-sub);
+    font-weight:600;
+    font-size:17px;
+}
+
+.input{
+    width:250px;
+    height:40px;
+    border-radius:5px;
+    border:2px solid var(--main-color);
+    background-color:var(--bg-color);
+    box-shadow:4px 4px var(--main-color);
+    font-size:15px;
+    font-weight:600;
+    color:var(--font-color);
+    padding:5px 10px;
+    outline:none;
+}
+
+.input::placeholder{
+    color:var(--font-color-sub);
+    opacity:0.8;
+}
+
+.input:focus{
+    border:2px solid var(--input-focus);
+}
+
+.login-with{
+    display:flex;
+    gap:20px;
+}
+
+.button-log{
+    cursor:pointer;
+    width:40px;
+    height:40px;
+    border-radius:100%;
+    border:2px solid var(--main-color);
+    background-color:var(--bg-color);
+    box-shadow:4px 4px var(--main-color);
+    color:var(--font-color);
+    font-size:25px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.icon{
+    width:24px;
+    height:24px;
+    fill:var(--main-color);
+}
+
+.button-log:active,
+.button-confirm:active{
+    box-shadow:0 0 var(--main-color);
+    transform:translate(3px,3px);
+}
+
+.button-confirm{
+    margin:50px auto 0 auto;
+    width:120px;
+    height:40px;
+    border-radius:5px;
+    border:2px solid var(--main-color);
+    background-color:var(--bg-color);
+    box-shadow:4px 4px var(--main-color);
+    font-size:17px;
+    font-weight:600;
+    color:var(--font-color);
+    cursor:pointer;
+}
+
+/* Hero */
+.hero{
+    height:20vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-evenly;
+    align-items:center;
+    text-align:center;
+    padding:10px;
+}
+
+.hero h1{
+    font-weight:700;
+}
+
+.hero p{
+    font-size:18px;
+    color:#555;
+}
+
+/* Feature */
+.feature-box{
+    padding:20px;
+    background:white;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* Footer */
+footer{
+    background:#111;
+    color:white;
+    padding:20px;
+    margin-top:60px;
+}
+
+/* Brutalist Card */
+.brutalist-card{
+    width:300px;
+    border:4px solid #000;
+    background-color:#fff;
+    padding:1.5rem;
+    box-shadow:10px 10px 0 #000;
+}
+
+.brutalist-card__header{
+    gap:1rem;
+    margin-bottom:1rem;
+    border-bottom:2px solid #000;
+    padding-bottom:1rem;
+}
+
+.brutalist-card__alert{
+    font-weight:900;
+    color:#000;
+    font-size:1rem;
+    text-transform:uppercase;
+}
+
+.brutalist-card__actions{
+    margin-top:1rem;
+}
+
+.brutalist-card__button{
+    display:block;
+    width:100%;
+    padding:0.75rem;
+    text-align:center;
+    font-size:1rem;
+    font-weight:700;
+    text-transform:uppercase;
+    border:3px solid #000;
+    background-color:#fff;
+    color:#000;
+    position:relative;
+    transition:all 0.2s ease;
+    box-shadow:5px 5px 0 #000;
+    overflow:hidden;
+    text-decoration:none;
+    margin-bottom:1rem;
+}
+
+.brutalist-card__button--read{
+    background-color:#000;
+    color:#fff;
+}
+
+.brutalist-card__button::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition:all 0.6s;
+}
+
+.brutalist-card__button:hover::before{
+    left:100%;
+}
+
+.brutalist-card__button:hover{
+    transform:translate(-2px,-2px);
+    box-shadow:7px 7px 0 #000;
+}
+
+.brutalist-card__button--mark:hover{
+    background-color:#296fbb;
+    border-color:#296fbb;
+    color:#fff;
+    box-shadow:7px 7px 0 #004280;
+}
+
+.brutalist-card__button--read:hover{
+    background-color:#ff0000;
+    border-color:#ff0000;
+    color:#fff;
+    box-shadow:7px 7px 0 #800000;
+}
+
+.brutalist-card__button:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
+}
+</style>
+
+<style>
+#about {
+    margin-top:180px;
+    scroll-margin-top: 80px;
+}
+
+.main-wrapper {
+    display: flex;
+    margin-top: 50px;
+    height: 60vh;
+    border-radius: 20px;
+    position: relative;
+}
+
+.main-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    border: 4px solid rgba(0,0,0,0.5);
+    filter: blur(8px);
+    pointer-events: none;
+}
+
+
+/* Floating Container */
+.floating-elements {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Floating Brutalist Boxes */
+.float-box {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0 #000;
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Position Variations */
+.box1 {
+    top: 15%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.box2 {
+    bottom: 20%;
+    right: 12%;
+    animation-delay: 2s;
+}
+
+.box3 {
+    top: 60%;
+    left: 35%;
+    animation-delay: 4s;
+}
+
+.box4 {
+    top: 25%;
+    left: 65%;
+    animation-delay: 0s;
+}
+
+/* Floating Animation */
+@keyframes float {
+    0%   { transform: translateY(0px) rotate(0deg); }
+    50%  { transform: translateY(-20px) rotate(6deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="floating-elements">
+    <div class="float-box box1"></div>
+    <div class="float-box box2"></div>
+    <div class="float-box box3"></div>
+    <div class="float-box box4"></div>
+</div>
+
+<nav class="navbar">
+  <div class="navbar-logo">YConnekt</div>
+
+  <div class="navbar-menu">
+      <a href="#">Home</a>
+      <a href="{% url 'SignUp' %}">Login</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+
+
+<!--  CARDS START-->
+
+<section id="home" style="display:flex; justify-content:center; gap:120px; margin:150px;">
+
+    <!--    Ttile Section-->
+    <div class="hero">
+        <img src="{% static 'images/YConnekt.png' %}" alt="Hero Image" width="300px" style="border-radius:50%">
+        <h1>Find Part-Time Jobs Near You</h1>
+        <p>Connecting youth with local businesses for instant job opportunities.</p>
+    </div>
+
+    <!-- Hero Section -->
+
+
+</section>
+
+<section style=" margin-bottom:150px;" id="choice" >
+    <div>
+        <div class="main-wrapper" >
+            <!-- Employer -->
+            <div class="section left cardcontainer">
+                <form class="leftform">
+                    <div class="title">Ready to Hire?<br><span>Post jobs & hire here</span></div>
+                    <a class="button-confirm" href="{% url 'regEmp' %}">Let`s go →</a>
+                </form>
+            </div>
+
+            <!-- User -->
+            <div class="section right cardcontainer">
+                <form class="rightform">
+                    <div class="title">Ready to Work?<br><span>Find your next job here</span></div>
+                    <a class="button-confirm" href="{% url 'regEmployee'  %}">Let`s go →</a>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="hero">
+        <div class="brutalist-card" style="margin:20px auto; padding:10px;">
+          <div class="brutalist-card__header">
+            <div class="brutalist-card__alert">Already a Member</div>
+          </div>
+          <div class="brutalist-card__actions" style="padding-bottom: 5px;">
+            <a class="brutalist-card__button brutalist-card__button--read" href="{% url 'SignUp' %}">Log In</a>
+          </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" style="display:flex; justify-content:center; padding:120px 20px; margin-top:150px;">
+
+    <div class="brutalist-card" style="max-width:700px; width:100%; box-shadow:12px 12px 0 #000;">
+
+        <div class="brutalist-card__header" style="border-bottom:3px solid #000; margin-bottom:20px;">
+            <div class="brutalist-card__alert" style="font-size:1.2rem;">
+                ABOUT YCONNEKT
+            </div>
+        </div>
+
+        <div style="font-size:16px; line-height:1.7; font-weight:600;">
+            <p style="margin-bottom:15px;">
+                YConnekt is built to simplify the way young job seekers and local businesses connect.
+                We focus on making part-time hiring fast, transparent, and accessible.
+            </p>
+
+            <p>
+                Whether you're looking for flexible work or searching for reliable talent,
+                YConnekt provides a simple platform that connects the right people at the right time.
+            </p>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- Brutalist Contact Section -->
+<section id="contact" style="display:flex; justify-content:center; padding:120px 20px;  margin-top:150px;">
+
+    <div class="brutalist-card" style="max-width:800px; width:100%; box-shadow:12px 12px 0 #000;">
+
+        <!-- Header -->
+        <div class="brutalist-card__header" style="border-bottom:3px solid #000; margin-bottom:25px;">
+            <div class="brutalist-card__alert" style="font-size:1.2rem;">
+                CONTACT YCONNEKT
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div style="margin-bottom:30px; font-weight:600; line-height:1.7;">
+            <p>Have questions or need support?</p>
+            <p>Reach out to us and we’ll get back to you as soon as possible.</p>
+        </div>
+
+        <!-- Contact Form -->
+        <form method="POST" action="{% url 'IndexPage' %}">
+            {% csrf_token %}
+
+            <input type="text" name="name" placeholder="Your Name"
+                style="width:100%; padding:12px; margin-bottom:15px;
+                border:3px solid #000; font-weight:600;
+                box-shadow:6px 6px 0 #000;">
+
+            <input type="email" name="email" placeholder="Your Email"
+                style="width:100%; padding:12px; margin-bottom:15px;
+                border:3px solid #000; font-weight:600;
+                box-shadow:6px 6px 0 #000;">
+
+            <textarea name="message" rows="5" placeholder="Your Message"
+                style="width:100%; padding:12px; margin-bottom:20px;
+                border:3px solid #000; font-weight:600;
+                box-shadow:6px 6px 0 #000;"></textarea>
+
+            <button type="submit" class="brutalist-card__button brutalist-card__button--read"
+                style="width:100%; padding:14px;
+                background:#000; color:#fff;
+                font-weight:800; border:3px solid #000;
+                box-shadow:6px 6px 0 #000;
+                cursor:pointer; transition:0.2s;">
+                SEND MESSAGE →
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% if messages %}
+    {% for message in messages %}
+        <p style="color:red; font-weight:700;">
+            {{ message }}
+        </p>
+    {% endfor %}
+{% endif %}
+</body>
+</html>
